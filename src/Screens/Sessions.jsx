@@ -81,7 +81,7 @@ const Sessions = () => {
             source={require('../Assets/Icons/clock.png')}
           />
         </TouchableOpacity>
-        <Text>List Of Sessions</Text>
+        <Text style={styles.Header}>List Of Sessions</Text>
         <ScrollView style={styles.scrollContainer}>
           {sessions.map(e => (
             <SessionCard session={e} onEdit={handleEdit} key={e.id} />
@@ -135,4 +135,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#28209C',
   },
   addIcon: {width: '50%'},
+  Header: {
+    position: 'absolute',
+    zIndex: 100,
+    left: 50,
+    top: Height * 0.04,
+    fontSize: 22,
+  },
 });

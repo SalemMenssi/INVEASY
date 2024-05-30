@@ -82,6 +82,7 @@ const Employers = () => {
             source={require('../Assets/Icons/addUser.png')}
           />
         </TouchableOpacity>
+        <Text style={styles.Header}>List Of Employers</Text>
         <ScrollView style={styles.scrollContainer}>
           {employers.map(e => (
             <EmployerCard employer={e} onEdit={handleEdit} key={e.id} />
@@ -134,4 +135,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#28209C',
   },
   addIcon: {width: '50%'},
+  Header: {
+    position: 'absolute',
+    zIndex: 100,
+    left: 50,
+    top: Height * 0.04,
+    fontSize: 22,
+  },
 });

@@ -33,7 +33,7 @@ const EditAddProduct = ({product, onClose, onSave, isEdit, onAdd}) => {
       ref,
       name,
       category: {name: category},
-      imageUrl: NewImage.uri,
+      imageUrl: NewImage && NewImage.uri,
       sellPrice: parseFloat(sellPrice),
     };
     if (isEdit) {
@@ -103,17 +103,7 @@ const EditAddProduct = ({product, onClose, onSave, isEdit, onAdd}) => {
         showsVerticalScrollIndicator={false}
         dropdownStyle={styles.dropdownMenuStyle}
       />
-      <TouchableOpacity
-        style={[
-          styles.dropdownButtonStyle,
-          {
-            width: '20%',
-            paddingVertical: 35,
-            marginTop: 30,
-            alignSelf: 'flex-start',
-          },
-        ]}
-        onPress={getNewImage}>
+      <TouchableOpacity style={styles.uploadButton} onPress={getNewImage}>
         <Image
           style={styles.uploadIcon}
           source={require('../Assets/Icons/Upload.png')}
@@ -121,7 +111,7 @@ const EditAddProduct = ({product, onClose, onSave, isEdit, onAdd}) => {
       </TouchableOpacity>
       <Image
         style={styles.uploadImage}
-        source={{uri: NewImage && NewImage.uri}}
+        source={{uri: NewImage != null ? NewImage.uri : imageUrl}}
       />
       <View style={styles.buttonContainer}>
         <ButtonOutline
@@ -219,7 +209,18 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginRight: 8,
   },
-  uploadIcon: {resizeMode: 'contain', tintColor: '#fff', width: 50},
+  uploadButton: {
+    width: '20%',
+    height: Height * 0.1,
+    alignSelf: 'flex-start',
+    marginVertical: 20,
+  },
+  uploadIcon: {
+    resizeMode: 'contain',
+    tintColor: '#3C2CEC',
+    width: '100%',
+    height: '100%',
+  },
   uploadImage: {
     width: Width * 0.55,
     height: Width * 0.55,

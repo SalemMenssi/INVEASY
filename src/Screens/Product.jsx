@@ -64,6 +64,7 @@ const Product = () => {
             source={require('../Assets/Icons/addProduct.png')}
           />
         </TouchableOpacity>
+        <Text style={styles.Header}>List Of Product</Text>
         <ScrollView style={styles.scrollContainer}>
           {products.map(product => (
             <ProductCard
@@ -120,4 +121,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#28209C',
   },
   addIcon: {width: '50%'},
+  Header: {
+    position: 'absolute',
+    zIndex: 100,
+    left: 50,
+    top: Height * 0.04,
+    fontSize: 22,
+  },
 });

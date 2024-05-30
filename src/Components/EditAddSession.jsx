@@ -1,44 +1,80 @@
 import React, {useEffect, useState} from 'react';
-import {TextInput, Button, View, Text, StyleSheet} from 'react-native';
+import {TextInput, View, Text, StyleSheet, ScrollView} from 'react-native';
 import ButtonOutline from './ButtonOutline';
 import DatePicker from 'react-native-date-picker';
 import RadioButtonRN from 'radio-buttons-react-native';
+import CheckBox from 'react-native-check-box';
 
-const DatePickerCostum = props => {
+const DatePickerCustom = props => {
   return (
     <DatePicker
       textColor="#000"
       mode="datetime"
       date={props.time}
       onDateChange={props.setTime}
-      style={{backgroundColor: '#fff', borderRadius: 10, padding: 10}} // Add your custom styles here
+      style={{backgroundColor: '#fff', borderRadius: 10, padding: 10}}
     />
   );
 };
+
 const data = [
   {
-    label: 'Availble',
+    label: 'Available',
   },
   {
     label: 'Disable',
   },
 ];
+
+const Users = [
+  {username: 'user1'},
+  {username: 'user2'},
+  {username: 'user3'},
+  {username: 'user4'},
+  {username: 'user5'},
+  {username: 'user6'},
+  {username: 'user7'},
+  {username: 'user8'},
+];
+
 const EditAddSession = ({session, onClose, onSave, isEdit, onAdd}) => {
-  // title, date, time, duration, status
   const [title, setTitle] = useState(session?.title || '');
   const [date, setDate] = useState(
     session?.date ? new Date(session.date) : new Date(),
   );
-
   const [duration, setDuration] = useState(session?.duration || '');
-  const [status, setStatus] = useState();
+  const [status, setStatus] = useState(session?.status || '');
+  const [selectedUsers, setSelectedUsers] = useState(
+    session?.selectedUsers || [],
+  );
 
   const handleSave = () => {
-    isEdit
-      ? onSave({...session, title, date, duration, status})
-      : onAdd(title, date, duration, status);
+    const newSession = {
+      ...session,
+      title,
+      date,
+      duration,
+      status,
+      selectedUsers,
+    };
+    if (isEdit) {
+      onSave(newSession);
+    } else {
+      onAdd(newSession);
+    }
     onClose();
   };
+
+  const toggleUserSelection = username => {
+    setSelectedUsers(prevSelectedUsers =>
+      prevSelectedUsers.includes(username)
+        ? prevSelectedUsers.filter(user => user !== username)
+        : [...prevSelectedUsers, username],
+    );
+  };
+  useEffect(() => {
+    console.log(date);
+  }, [date]);
 
   return (
     <View style={styles.modalContainer}>
@@ -52,22 +88,7 @@ const EditAddSession = ({session, onClose, onSave, isEdit, onAdd}) => {
         value={title}
         onChangeText={text => setTitle(text)}
       />
-
-      {/* <TextInput
-        placeholderTextColor={'#28209C'}
-        style={styles.input}
-        placeholder="Date"
-        value={date}
-        onChangeText={text => setDate(text)}
-      /> */}
-      <DatePickerCostum time={date} setTime={setDate} />
-      {/* <TextInput
-        placeholderTextColor={'#28209C'}
-        style={styles.input}
-        placeholder="Time"
-        value={time}
-        onChangeText={text => setTime(text)}
-      /> */}
+      <DatePickerCustom time={date} setTime={setDate} />
       <TextInput
         placeholderTextColor={'#28209C'}
         style={styles.input}
@@ -75,13 +96,23 @@ const EditAddSession = ({session, onClose, onSave, isEdit, onAdd}) => {
         value={duration}
         onChangeText={text => setDuration(text)}
       />
-
       <RadioButtonRN
         style={{width: '100%'}}
         data={data}
         selectedBtn={e => setStatus(e.label)}
         initial={status === 'Available' ? 1 : status === 'Disable' ? 2 : 0}
       />
+      <ScrollView style={styles.scrollView}>
+        {Users.map(user => (
+          <CheckBox
+            key={user.username}
+            style={styles.checkbox}
+            onClick={() => toggleUserSelection(user.username)}
+            isChecked={selectedUsers.includes(user.username)}
+            leftText={user.username}
+          />
+        ))}
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <ButtonOutline
           text="Cancel"
@@ -126,5 +157,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '80%',
+  },
+  scrollView: {
+    width: '100%',
+    maxHeight: 150,
+    marginBottom: 20,
+  },
+  checkbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
   },
 });
